@@ -11,6 +11,8 @@ import ManageForm from '@/components/pizza/manageForm/manageForm';
 import ToppingCard from '@/components/pizza/toppingCard/toppingCard';
 import Link from 'next/link';
 
+const tableToppings = 'toppings';
+
 export default function ToppingsInventoryPage() {
     const [toppings, setToppings] = useState<any[] | null>(null);
     const [addNew, setAddNew] = useState<boolean>(false);
@@ -23,7 +25,7 @@ export default function ToppingsInventoryPage() {
 
     useEffect(() => {
         const getData = async () => {
-            const { data } = await supabase.from('toppings').select();
+            const { data } = await supabase.from(tableToppings).select();
             setToppings(data);
         };
         getData();
@@ -48,15 +50,9 @@ export default function ToppingsInventoryPage() {
 
     const addNewTopping = async (formData: FormData) => {
         const supabase = await createClient();
-
         const name = formData.get("name") as string;
-        if (!name) {
-            setAddNewError("Topping name is required");
-            return;
-        }
-
         const { error } = await supabase
-            .from('toppings')
+            .from(tableToppings)
             .insert({ name: name });
 
         if (error) {
@@ -72,7 +68,7 @@ export default function ToppingsInventoryPage() {
         const name = formData.get("name") as string;
 
         const { error } = await supabase
-            .from('toppings')
+            .from(tableToppings)
             .update({ name })
             .eq('id', editId);
 
@@ -87,7 +83,7 @@ export default function ToppingsInventoryPage() {
     const deleteTopping = async (id: string) => {
         const supabase = await createClient();
         const response = await supabase
-            .from('toppings')
+            .from(tableToppings)
             .delete()
             .eq('id', id);
 
@@ -134,23 +130,22 @@ export default function ToppingsInventoryPage() {
             {
                 addNew &&
                 <ManageForm
-                    headingText="Add Topping"
+                    headingText="Add New Topping"
                     close={closeAddNew}
                     submit={addNewTopping}
-                    submitText="Create New Topping"
+                    submitText="Create"
                     errorText={addNewError}
                 >
                     <Label htmlFor="name">Name</Label>
                     <Input name="name" placeholder="pepperoni" className="text-white" required onChange={() => setAddNewError(null)} />
                 </ManageForm>
             }
-
             {editId &&
                 <ManageForm
                     headingText="Edit Topping"
                     close={() => setEditId(null)}
                     submit={editTopping}
-                    submitText="Edit Topping"
+                    submitText="Update Topping"
                     errorText={editError}
                 >
                     <Label htmlFor="name">Name</Label>

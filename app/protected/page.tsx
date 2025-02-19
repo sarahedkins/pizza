@@ -19,9 +19,12 @@ export default async function ProtectedPage() {
         <h2 className="font-bold text-2xl mb-4">The Pizza Shop</h2>
         <p className="font-bold text-2xl mb-4">Inventory Management</p>
       </header>
-      <ul>
+      <ul className="flex flex-col space-y-4">
         <button title="Toppings Inventory" className="bg-white text-black font-bold p-2 rounded-md">
           <Link href="/protected/toppings-inventory">Toppings Inventory</Link>
+        </button>
+        <button title="Pizza Inventory" className="bg-white text-black font-bold p-2 rounded-md">
+          <Link href="/protected/pizza-inventory">Pizza Inventory</Link>
         </button>
       </ul>
     </div>
