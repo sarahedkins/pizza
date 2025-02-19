@@ -1,5 +1,5 @@
 
-<h1 align="center">My Pizza Shop App</h1>
+<h1 align="center">My Pizza Shop Inventory App</h1>
 
   Built with boilerplate from:
   <a href="https://demo-nextjs-with-supabase.vercel.app/">
