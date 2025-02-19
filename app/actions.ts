@@ -132,32 +132,3 @@ export const signOutAction = async () => {
   await supabase.auth.signOut();
   return redirect("/sign-in");
 };
-
-export const addNewToppingAction = async (formData: FormData) => {
-  const supabase = await createClient();
-
-  const name = formData.get("name") as string;
-
-  if (!name) {
-    encodedRedirect(
-      "error",
-      "/protected/toppings-inventory",
-      "Topping name is required",
-    );
-  }
-
-  const { error } = await supabase
-    .from('toppings')
-    .insert({ name: name });
-
-  if (error) {
-    console.error(error);
-    encodedRedirect(
-      "error",
-      "/protected/toppings-inventory",
-      "Adding topping has failed",
-    );
-  }
-
-  encodedRedirect("success", "/protected/toppings-inventory", "Topping added!");
-};
