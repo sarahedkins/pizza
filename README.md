@@ -10,13 +10,13 @@
   - Supabase Postgres database
   - Deployable on Vercel
 
-## Notes
-The Next.js and Supabase Starter Kit included built-in authentication flow, which requires signing in with an email address and confirming via the email. I've configured the database table policies to allow only authenticated users to interact with the tables. 
-
 ## To use the application
 - Signup with an email address and password
 - Verify the email address when you recieve a confirmation email
 - Log in to the app to view the toppings and pizza management pages
+
+## Notes
+The Next.js and Supabase Starter Kit included built-in authentication flow, which requires signing in with an email address and confirming via the email. I've configured the database table policies to allow only authenticated users to interact with the tables. 
 
 ## To run locally with your own Supabase instance
 - `npm install`
@@ -33,3 +33,24 @@ The Next.js and Supabase Starter Kit included built-in authentication flow, whic
    npm run dev
    ```
    It will be running on [localhost:3000](http://localhost:3000/).
+
+## Tests
+
+I elected not to implement tests for this project. I typically base the decision to write tests on a few factors including the longevity of the application, and the business logic complexity. Since the longevity of this project is low, and I can enforce most of the required business logic in the database constraints itself, I elected not to add tests.
+
+In the real world, on a real application, I am more than happy to write thoughtful tests.
+
+## Ambiguity 
+
+Since this is a take-home assignment with a 3 day time limit, I opted to make reasonable executive decisions when faced with ambiguity. In the real world, I would colloborate with project stakeholders to clarify the requirements to inform the best path forward.
+
+For example, what should happen when a topping that is used in a pizza is deleted? Normally I would run this question by a stakeholder. Here, I opted to allow the topping to be deleted and mark the pizza in the UI so the pizza shop keeper could edit the pizza, if needed.  
+
+## Codepointers for Hiring Team reviewers
+
+The interesting parts of the code to look at are:
+- app/protected/pizza-inventory/page.tsx
+- app/protected/toppings-inventory/page.tsx
+- components/pizza/pizzaCard/pizzaCard.tsx
+- components/pizza/toppingCard/toppingCard.tsx
+- app/protected/page.tsx
