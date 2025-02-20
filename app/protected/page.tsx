@@ -20,12 +20,16 @@ export default async function ProtectedPage() {
         <p className="font-bold text-2xl mb-4">Inventory Management</p>
       </header>
       <ul className="flex flex-col space-y-4">
-        <button title="Toppings Inventory" className="bg-white text-black font-bold p-2 rounded-md">
-          <Link href="/protected/toppings-inventory">Toppings Inventory</Link>
-        </button>
-        <button title="Pizza Inventory" className="bg-white text-black font-bold p-2 rounded-md">
-          <Link href="/protected/pizza-inventory">Pizza Inventory</Link>
-        </button>
+        <Link href="/protected/toppings-inventory">
+          <button title="Toppings Inventory" className="bg-white text-black font-bold p-2 rounded-md">
+            Toppings Inventory
+          </button>
+        </Link>
+        <Link href="/protected/pizza-inventory">
+          <button title="Pizza Inventory" className="bg-white text-black font-bold p-2 rounded-md">
+            Pizza Inventory
+          </button>
+        </Link>
       </ul>
     </div>
   );
