@@ -13,6 +13,7 @@ import ManageForm from '@/components/pizza/manageForm/manageForm';
 import Link from 'next/link';
 import { Checkbox } from "@radix-ui/react-checkbox";
 import PizzaCard from '@/components/pizza/pizzaCard/pizzaCard';
+import { scrollToElement } from '@/lib/utils';
 
 const tablePizzas = 'pizzas';
 const tableToppings = 'toppings';
@@ -65,6 +66,7 @@ export default function PizzaInventoryPage() {
     const toggleAddNew = () => {
         if (!addNew) {
             setEditId(null); // only one ManageSection should show at a time
+            scrollToElement('manage-section');
         }
         setAddNew(!addNew);
     };
@@ -135,15 +137,13 @@ export default function PizzaInventoryPage() {
         const newToppings: Record<string, boolean> = {};
         (pizza?.toppings ?? []).forEach(topping => newToppings[topping] = true);
         setToppingsToAdd(newToppings);
+        scrollToElement('manage-section');
     };
 
     const toggleTopping = (toppingId: string) => {
         setToppingsToAdd({ ...toppingsToAdd, [toppingId]: !toppingsToAdd[toppingId] });
     };
 
-    // const toggleEditTopping = (toppingId: string) => {
-    //     setEditPizzaToppings({ ...editPizzaToppings, [toppingId]: !editPizzaToppings[parseInt(toppingId)] });
-    // };
 
     return (
         <div className="container mx-auto p-4">
@@ -205,7 +205,9 @@ export default function PizzaInventoryPage() {
                     <br />
                 </ManageForm>
             }
-
+            <div id="manage-section">
+                {/* This is a landmark for scrollToElement! */}
+            </div>
             {editId &&
                 <ManageForm
                     headingText="Edit Pizza"

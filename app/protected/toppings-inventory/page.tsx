@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import ManageForm from '@/components/pizza/manageForm/manageForm';
 import ToppingCard from '@/components/pizza/toppingCard/toppingCard';
 import Link from 'next/link';
+import { scrollToElement } from '@/lib/utils';
 
 const tableToppings = 'toppings';
 
@@ -41,6 +42,7 @@ export default function ToppingsInventoryPage() {
     const toggleAddNew = () => {
         if (!addNew) {
             setEditId(null); // only one ManageSection should show at a time
+            scrollToElement('manage-section');
         }
         setAddNew(!addNew);
     };
@@ -103,6 +105,7 @@ export default function ToppingsInventoryPage() {
         const topping = toppings.find(topping => topping.id === id);
         setEditToppingName(topping?.name ?? "Pepperoni");
         setEditId(id);
+        scrollToElement('manage-section');
     };
 
     return (
@@ -130,6 +133,9 @@ export default function ToppingsInventoryPage() {
             </div>
 
             <br />
+            <div id="manage-section">
+                {/* This is a landmark for scrollToElement! */}
+            </div>
             {
                 addNew &&
                 <ManageForm
