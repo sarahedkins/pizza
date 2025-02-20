@@ -4,16 +4,14 @@ import Loader from '@/components/pizza/loader/loader';
 import { createClient } from '@/utils/supabase/client';
 import { useEffect, useState } from 'react';
 import Add from '/public/add.svg';
-import CheckedIcon from '/public/checkbox.svg';
-import CheckboxIcon from '/public/square-small.svg';
 import Image from 'next/image';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import ManageForm from '@/components/pizza/manageForm/manageForm';
 import Link from 'next/link';
-import { Checkbox } from "@radix-ui/react-checkbox";
 import PizzaCard from '@/components/pizza/pizzaCard/pizzaCard';
 import { scrollToElement } from '@/lib/utils';
+import ToppingsList from '@/components/pizza/toppingsList/toppingsList';
 
 const tablePizzas = 'pizzas';
 const tableToppings = 'toppings';
@@ -189,21 +187,11 @@ export default function PizzaInventoryPage() {
                         onChange={() => setAddNewError(null)} />
 
                     <Label htmlFor="toppings[]">Choose toppings:</Label>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {toppings && Object.keys(toppings).map((toppingId) => (
-                            <label key={toppingId} id={`toppings_${toppings[toppingId]}`}>
-                                <Checkbox
-                                    checked={true}
-                                    onCheckedChange={() => { toggleTopping(toppingId); }}
-                                    id={`checkbox-for-${toppings[toppingId]}`}
-                                />
-                                <span className="ml-2 flex flex-row">{toppingsToAdd[toppingId] ?
-                                    <Image src={CheckedIcon} alt='checked' width={32} height={32} /> :
-                                    <Image src={CheckboxIcon} alt='unchecked' width={32} height={32} />}
-                                    {toppings[toppingId]}</span>
-                            </label>
-                        ))}
-                    </div>
+                    <ToppingsList
+                        toppings={toppings}
+                        toppingsToAdd={toppingsToAdd}
+                        toggleTopping={toggleTopping}
+                    />
                     <br />
                 </ManageForm>
             }
@@ -231,21 +219,11 @@ export default function PizzaInventoryPage() {
                     />
 
                     <Label htmlFor="toppings[]">Edit toppings:</Label>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {toppings && Object.keys(toppings).map((toppingId: string) => (
-                            <label key={toppingId} id={`toppings_${toppings[toppingId]}`}>
-                                <Checkbox
-                                    checked={true}
-                                    onCheckedChange={() => { toggleTopping(toppingId); }}
-                                    id={`checkbox-for-${toppings[toppingId]}`}
-                                />
-                                <span className="ml-2 flex flex-row">{toppingsToAdd[toppingId] ?
-                                    <Image src={CheckedIcon} alt='checked' width={32} height={32} /> :
-                                    <Image src={CheckboxIcon} alt='unchecked' width={32} height={32} />}
-                                    {toppings[toppingId]}</span>
-                            </label>
-                        ))}
-                    </div>
+                    <ToppingsList
+                        toppings={toppings}
+                        toppingsToAdd={toppingsToAdd}
+                        toggleTopping={toggleTopping}
+                    />
                 </ManageForm>
             }
         </div>
