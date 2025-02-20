@@ -46,6 +46,10 @@ Since this is a take-home assignment with a 3 day time limit, I opted to make re
 
 For example, what should happen when a topping that is used in a pizza is deleted? Normally I would run this question by a stakeholder. Here, I opted to allow the topping to be deleted and mark the pizza in the UI so the pizza shop keeper could edit the pizza.  
 
+## If I had more time...
+- I would add error handling to the database fetches. I'd use try/catch blocks and a toast notification system to properly display errors. I'd also log errors to an error managmeent platform so the developers can track and handle frequent errors.
+- I would make the topping quantities editable. If this were a real shop, you should be able to keep track of inventory and mark certain pizzas as unavailable when the quantity of a topping is too low. 
+
 ## Codepointers for Hiring Team reviewers
 
 The interesting parts of the code to look at are:
