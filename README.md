@@ -6,6 +6,7 @@
 ## The Stack
   - Typescript
   - React & JSX
+  - Tailwind (UI is mobile responsive!)
   - Next.js
   - Supabase Postgres database
   - Deployable on Vercel
