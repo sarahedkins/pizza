@@ -20,6 +20,7 @@ interface Pizza {
     id: number;
     name: string;
     toppings: number[];
+    expiredToppings: boolean;
 }
 
 export default function PizzaInventoryPage() {
@@ -27,6 +28,7 @@ export default function PizzaInventoryPage() {
     const [toppings, setToppings] = useState<Record<string, string> | null>(null);
     const [addNew, setAddNew] = useState<boolean>(false);
     const [editId, setEditId] = useState<number | null>(null);
+    const [selectedPizza, setSelectedPizza] = useState<Pizza | null>(null);
     const [refetchPizzas, setRefetchPizzas] = useState<number>(0);
     const [addNewError, setAddNewError] = useState<string | null>(null);
     const [editError, setEditError] = useState<string | null>(null);
@@ -49,11 +51,27 @@ export default function PizzaInventoryPage() {
 
     useEffect(() => {
         const getPizzaData = async () => {
+            if (!toppings) return;
             const { data } = await supabase.from(tablePizzas).select();
-            setPizzas(data);
+            if (!data) return;
+
+            const updatedData: Pizza[] = data.map(d => {
+                let expiredToppings = false;
+                for (let i = 0; i < d.toppings.length; i++) {
+                    const top = toppings[`${d.toppings[i]}`];
+                    if (!toppings[`${d.toppings[i]}`]) {
+                        expiredToppings = true;
+                        break;
+                    }
+                }
+                return { ...d, expiredToppings };
+            });
+            setPizzas(updatedData);
         };
-        getPizzaData();
-    }, [refetchPizzas]);
+        if (toppings != null) {
+            getPizzaData();
+        }
+    }, [refetchPizzas, toppings]);
 
     if (!toppings || !pizzas) {
         return (
@@ -64,6 +82,7 @@ export default function PizzaInventoryPage() {
     const toggleAddNew = () => {
         if (!addNew) {
             setEditId(null); // only one ManageSection should show at a time
+            setSelectedPizza(null);
             scrollToElement('manage-section');
 
             // clear existing toppingsToAdd
@@ -110,6 +129,7 @@ export default function PizzaInventoryPage() {
             return;
         }
         setEditId(null);
+        setSelectedPizza(null);
         setRefetchPizzas(refetchPizzas + 1);
     };
 
@@ -134,10 +154,16 @@ export default function PizzaInventoryPage() {
         }
         setEditId(id);
         const pizza = pizzas.find(pizza => pizza.id === id);
-        setEditPizzaName(pizza?.name ?? "Extra Cheese");
-        const newToppings: Record<string, boolean> = {};
-        (pizza?.toppings ?? []).forEach(topping => newToppings[topping] = true);
-        setToppingsToAdd(newToppings);
+        if (!pizza) return;
+        setSelectedPizza(pizza);
+        setEditPizzaName(pizza.name);
+        const previousToppings: Record<string, boolean> = {};
+        (pizza?.toppings ?? []).forEach(pizzaTopping => {
+            if (toppings[pizzaTopping]) {
+                previousToppings[pizzaTopping] = true;
+            }
+        });
+        setToppingsToAdd(previousToppings);
         scrollToElement('manage-section');
     };
 
@@ -159,6 +185,7 @@ export default function PizzaInventoryPage() {
                         handleDelete={deletePizza}
                         handleEdit={handleSetEditId}
                         toppingsData={toppings}
+                        expired={pizza.expiredToppings}
                     />
                 ))}
                 <button onClick={toggleAddNew} title="Open add new topping form." className="h-full">
@@ -223,6 +250,7 @@ export default function PizzaInventoryPage() {
                         toppings={toppings}
                         toppingsToAdd={toppingsToAdd}
                         toggleTopping={toggleTopping}
+                        expiredTopping={selectedPizza?.expiredToppings}
                     />
                 </ManageForm>
             }

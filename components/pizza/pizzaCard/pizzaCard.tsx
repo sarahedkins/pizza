@@ -9,6 +9,7 @@ interface Props {
     handleDelete: (id: number) => void;
     handleEdit: (id: number) => void;
     toppingsData: Record<string, string>;
+    expired: boolean;
 }
 
 const PizzaCard = ({
@@ -18,9 +19,13 @@ const PizzaCard = ({
     handleDelete,
     handleEdit,
     toppingsData,
+    expired,
 }: Props) => {
     return (
-        <div key={id} className="bg-white rounded-lg shadow-md p-4 min-w-[250px] flex flex-col h-full">
+        <div key={id} className={expired ? "bg-red-100 rounded-lg shadow-md p-4 min-w-[250px] flex flex-col h-full" :
+            "bg-white rounded-lg shadow-md p-4 min-w-[250px] flex flex-col h-full"
+        }
+        >
             <div className="flex-grow">
                 <div className="flex flex-col">
                     <span className="text-gray-600">name</span>

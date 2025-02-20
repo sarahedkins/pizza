@@ -42,9 +42,9 @@ In the real world, on a real application, I am more than happy to write thoughtf
 
 ## Ambiguity 
 
-Since this is a take-home assignment with a 3 day time limit, I opted to make reasonable executive decisions when faced with ambiguity. In the real world, I would colloborate with project stakeholders to clarify the requirements to inform the best path forward.
+Since this is a take-home assignment with a 3 day time limit, I opted to make reasonable executive decisions when faced with ambiguity. In the real world, I would collaborate with project stakeholders to clarify the requirements to inform the best path forward.
 
-For example, what should happen when a topping that is used in a pizza is deleted? Normally I would run this question by a stakeholder. Here, I opted to allow the topping to be deleted and mark the pizza in the UI so the pizza shop keeper could edit the pizza, if needed.  
+For example, what should happen when a topping that is used in a pizza is deleted? Normally I would run this question by a stakeholder. Here, I opted to allow the topping to be deleted and mark the pizza in the UI so the pizza shop keeper could edit the pizza.  
 
 ## Codepointers for Hiring Team reviewers
 
