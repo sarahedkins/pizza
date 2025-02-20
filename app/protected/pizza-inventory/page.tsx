@@ -67,6 +67,9 @@ export default function PizzaInventoryPage() {
         if (!addNew) {
             setEditId(null); // only one ManageSection should show at a time
             scrollToElement('manage-section');
+
+            // clear existing toppingsToAdd
+            setToppingsToAdd({});
         }
         setAddNew(!addNew);
     };
@@ -143,7 +146,6 @@ export default function PizzaInventoryPage() {
     const toggleTopping = (toppingId: string) => {
         setToppingsToAdd({ ...toppingsToAdd, [toppingId]: !toppingsToAdd[toppingId] });
     };
-
 
     return (
         <div className="container mx-auto p-4">
