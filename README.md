@@ -51,6 +51,7 @@ For example, what should happen when a topping that is used in a pizza is delete
 The interesting parts of the code to look at are:
 - app/protected/pizza-inventory/page.tsx
 - app/protected/toppings-inventory/page.tsx
+- components/pizza/manageForm/manageForm.tsx
 - components/pizza/pizzaCard/pizzaCard.tsx
 - components/pizza/toppingCard/toppingCard.tsx
 - app/protected/page.tsx

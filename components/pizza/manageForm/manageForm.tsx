@@ -36,7 +36,7 @@ const ManageForm = ({
                     </div>
                     <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8 text-black">
                         {children}
-                        <SubmitButton formAction={submit} className="bg-black text-white hover:bg-orange-400">
+                        <SubmitButton formAction={submit} className="bg-black text-white hover:bg-orange-400 mt-4">
                             {submitText}
                         </SubmitButton>
                         {errorText && (

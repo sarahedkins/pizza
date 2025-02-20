@@ -20,6 +20,7 @@ export default function ToppingsInventoryPage() {
     const [refetchToppings, setRefetchToppings] = useState<number>(0);
     const [addNewError, setAddNewError] = useState<string | null>(null);
     const [editError, setEditError] = useState<string | null>(null);
+    const [editToppingName, setEditToppingName] = useState<string>("");
 
     const supabase = createClient();
 
@@ -99,6 +100,8 @@ export default function ToppingsInventoryPage() {
         if (addNew) {
             setAddNew(false);
         }
+        const topping = toppings.find(topping => topping.id === id);
+        setEditToppingName(topping?.name ?? "Pepperoni");
         setEditId(id);
     };
 
@@ -145,11 +148,20 @@ export default function ToppingsInventoryPage() {
                     headingText="Edit Topping"
                     close={() => setEditId(null)}
                     submit={editTopping}
-                    submitText="Update Topping"
+                    submitText="Update"
                     errorText={editError}
                 >
-                    <Label htmlFor="name">Name</Label>
-                    <Input name="name" placeholder={toppings.find((topping) => topping.id === editId).name} className="text-white" required onChange={() => setAddNewError(null)} />
+                    <Label htmlFor="name">Rename?</Label>
+                    <Input
+                        name="name"
+                        value={editToppingName}
+                        className="text-white"
+                        required
+                        onChange={(e) => {
+                            setEditToppingName(e.target.value);
+                            setAddNewError(null);
+                        }}
+                    />
                 </ManageForm>
             }
         </div>

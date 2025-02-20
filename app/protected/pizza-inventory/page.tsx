@@ -17,8 +17,14 @@ import PizzaCard from '@/components/pizza/pizzaCard/pizzaCard';
 const tablePizzas = 'pizzas';
 const tableToppings = 'toppings';
 
+interface Pizza {
+    id: number;
+    name: string;
+    toppings: number[];
+}
+
 export default function PizzaInventoryPage() {
-    const [pizzas, setPizzas] = useState<any[] | null>(null);
+    const [pizzas, setPizzas] = useState<Pizza[] | null>(null);
     const [toppings, setToppings] = useState<Record<string, string> | null>(null);
     const [addNew, setAddNew] = useState<boolean>(false);
     const [editId, setEditId] = useState<number | null>(null);
@@ -26,6 +32,7 @@ export default function PizzaInventoryPage() {
     const [addNewError, setAddNewError] = useState<string | null>(null);
     const [editError, setEditError] = useState<string | null>(null);
     const [toppingsToAdd, setToppingsToAdd] = useState<Record<string, boolean>>({});
+    const [editPizzaName, setEditPizzaName] = useState<string>("");
 
     const supabase = createClient();
 
@@ -87,10 +94,12 @@ export default function PizzaInventoryPage() {
     const editPizza = async (formData: FormData) => {
         const supabase = await createClient();
         const name = formData.get("name") as string;
+        const toppingIdsToAdd =
+            Object.keys(toppingsToAdd).filter(toppingId => !!toppingsToAdd[toppingId]).map(toppingIdString => parseInt(toppingIdString));
 
         const { error } = await supabase
             .from(tablePizzas)
-            .update({ name }) // TODO sarahedkins update toppings on pizza
+            .update({ name, toppings: toppingIdsToAdd })
             .eq('id', editId);
 
         if (error) {
@@ -101,7 +110,7 @@ export default function PizzaInventoryPage() {
         setRefetchPizzas(refetchPizzas + 1);
     };
 
-    const deletePizza = async (id: string) => {
+    const deletePizza = async (id: number) => {
         const supabase = await createClient();
         const response = await supabase
             .from(tablePizzas)
@@ -121,11 +130,20 @@ export default function PizzaInventoryPage() {
             setAddNew(false);
         }
         setEditId(id);
+        const pizza = pizzas.find(pizza => pizza.id === id);
+        setEditPizzaName(pizza?.name ?? "Extra Cheese");
+        const newToppings: Record<string, boolean> = {};
+        (pizza?.toppings ?? []).forEach(topping => newToppings[topping] = true);
+        setToppingsToAdd(newToppings);
     };
 
     const toggleTopping = (toppingId: string) => {
         setToppingsToAdd({ ...toppingsToAdd, [toppingId]: !toppingsToAdd[toppingId] });
     };
+
+    // const toggleEditTopping = (toppingId: string) => {
+    //     setEditPizzaToppings({ ...editPizzaToppings, [toppingId]: !editPizzaToppings[parseInt(toppingId)] });
+    // };
 
     return (
         <div className="container mx-auto p-4">
@@ -163,7 +181,10 @@ export default function PizzaInventoryPage() {
                     errorText={addNewError}
                 >
                     <Label htmlFor="name">What do you want to call it?</Label>
-                    <Input name="name" placeholder="Meat Lover's Pie" className="text-white" required onChange={() => setAddNewError(null)} />
+                    <Input name="name"
+                        placeholder="Meat Lover's Pie"
+                        className="text-white" required
+                        onChange={() => setAddNewError(null)} />
 
                     <Label htmlFor="toppings[]">Choose toppings:</Label>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -190,11 +211,37 @@ export default function PizzaInventoryPage() {
                     headingText="Edit Pizza"
                     close={() => setEditId(null)}
                     submit={editPizza}
-                    submitText="Update Pizza"
+                    submitText="Update"
                     errorText={editError}
                 >
-                    <Label htmlFor="name">Name</Label>
-                    <Input name="name" placeholder={pizzas.find((pizza) => pizza.id === editId).name} className="text-white" required onChange={() => setAddNewError(null)} />
+                    <Label htmlFor="name">Rename it?</Label>
+                    <Input
+                        name="name"
+                        value={editPizzaName}
+                        className="text-white"
+                        required
+                        onChange={(e) => {
+                            setEditPizzaName(e.target.value);
+                            setAddNewError(null);
+                        }}
+                    />
+
+                    <Label htmlFor="toppings[]">Edit toppings:</Label>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {toppings && Object.keys(toppings).map((toppingId: string) => (
+                            <label key={toppingId} id={`toppings_${toppings[toppingId]}`}>
+                                <Checkbox
+                                    checked={true}
+                                    onCheckedChange={() => { toggleTopping(toppingId); }}
+                                    id={`checkbox-for-${toppings[toppingId]}`}
+                                />
+                                <span className="ml-2 flex flex-row">{toppingsToAdd[toppingId] ?
+                                    <Image src={CheckedIcon} alt='checked' width={32} height={32} /> :
+                                    <Image src={CheckboxIcon} alt='unchecked' width={32} height={32} />}
+                                    {toppings[toppingId]}</span>
+                            </label>
+                        ))}
+                    </div>
                 </ManageForm>
             }
         </div>

@@ -5,7 +5,7 @@ import Pencil from '/public/pencil.svg';
 interface Props {
     id: number;
     name: string;
-    toppings: string[];
+    toppings: number[];
     handleDelete: (id: number) => void;
     handleEdit: (id: number) => void;
     toppingsData: Record<string, string>;
